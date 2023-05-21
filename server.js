@@ -12,8 +12,6 @@ app.use(express.json());
 // MongoDB Atlas connection string
 const connectionString = `mongodb+srv://sofimann99:${process.env.MONGODB_PASSWORD}@kpi-internetshop2.ua9z9gk.mongodb.net/?retryWrites=true&w=majority`;
 
-// const fetch = require('node-fetch');
-
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
     .then(client => {
         console.log('Connected to MongoDB Atlas');
@@ -109,18 +107,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 });
         });
 
-        //Get wishlist
-        app.get('/wishlist', (req, res) => {
-            db.collection('wishlist')
-                .find({})
-                .toArray()
-                .then(data => res.json(data))
-                .catch(error => {
-                    console.error('Error:', error);
-                    res.sendStatus(500);
-                });
-        });
-
         // Count cart items
         app.get('/cart/count', (req, res) => {
             db.collection('cart')
@@ -139,26 +125,24 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 });
         });
 
-        // Add product to wishlist
-        app.post('/wishlist/add', (req, res) => {
-            const { productId } = req.body;
-            db.collection('wishlist')
-                .insertOne({ productId: Number(productId) })
-                .then(() => res.sendStatus(200))
-                .catch(error => {
-                    console.error('Error:', error);
-                    res.sendStatus(500);
-                });
-        });
 
-        // Update quantity
         app.put('/cart/update/:id/:size', (req, res) => {
-            const { productId, size } = req.params;
+            const { id, size } = req.params;
             const { newQuantity } = req.body;
-            console.log("Upserting product in cart", {productId, size, quantity: newQuantity})
+            console.log("Upserting product in cart", { productId: id, size, quantity: newQuantity });
             db.collection('cart')
-                .updateOne({ productId: productId, size: size }, { $set: { quantity: newQuantity} }, {upsert: true})
-                .then(() => res.sendStatus(200))
+                .updateOne(
+                    { productId: Number(id), size: size },
+                    { $set: { quantity: newQuantity } },
+                    { upsert: true }
+                )
+                .then(() => {
+                    if (newQuantity <= 0) {
+                        return db.collection('cart').deleteOne({ productId: Number(id), size: size });
+                    }
+                    return null;
+                })
+                .then(() => res.json({ removed: newQuantity <= 0, newQuantity }))
                 .catch(error => {
                     console.error('Error:', error);
                     res.sendStatus(500);
@@ -177,6 +161,29 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 });
         });
 
+
+        //Get wishlist
+        app.get('/wishlist', (req, res) => {
+            db.collection('wishlist')
+                .find({})
+                .toArray()
+                .then(data => res.json(data))
+                .catch(error => {
+                    console.error('Error:', error);
+                    res.sendStatus(500);
+                });
+        });
+        // Add product to wishlist
+        app.post('/wishlist/add', (req, res) => {
+            const { productId } = req.body;
+            db.collection('wishlist')
+                .insertOne({ productId: Number(productId) })
+                .then(() => res.sendStatus(200))
+                .catch(error => {
+                    console.error('Error:', error);
+                    res.sendStatus(500);
+                });
+        });
         // Delete product from wishlist
         app.delete('/wishlist/delete/:id', (req, res) => {
             const { id } = req.params;
@@ -197,93 +204,3 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     .catch(error => {
         console.error('Error connecting to MongoDB Atlas:', error);
     });
-
-
-
-//old code
-//
-// // Connect to MongoDB Atlas cluster
-// MongoClient.connect(connectionString, { useUnifiedTopology: true })
-//     .then(client => {
-//         console.log('Connected to MongoDB Atlas');
-//         const db = client.db('kpi-internetshop2');
-//
-//         //Routes
-//         app.get('/categories/:categoryId/products', (req, res) => {
-//             const { categoryId } = req.params;
-//             db.collection('products')
-//                 .find({ categoryId: categoryId })
-//                 .toArray()
-//                 .then(products => res.json(products))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//         app.get('/products/:id', (req, res) => {
-//             const { id } = req.params;
-//             db.collection('products')
-//                 .findOne({ id: Number(id) })
-//                 .then(product => res.json(product))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//         app.get('/categories', (req, res) => {
-//             db.collection('categories')
-//                 .find()
-//                 .toArray()
-//                 .then(categories => res.json(categories))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//         app.get('/categories/:id', (req, res) => {
-//             const { id } = req.params;
-//             db.collection('categories')
-//                 .findOne({ id: id })
-//                 .then(category => res.json(category))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//
-//         app.get('/products', (req, res) => {
-//             db.collection('products')
-//                 .find()
-//                 .toArray()
-//                 .then(products => res.json(products))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//         app.get('/search', (req, res) => {
-//             const { search } = req.query;
-//             const searchRegex = new RegExp(search, 'i');
-//             db.collection('products')
-//                 .find({ shortDescription: searchRegex })
-//                 .toArray()
-//                 .then(products => res.json(products))
-//                 .catch(error => {
-//                     console.error('Error:', error);
-//                     res.sendStatus(500);
-//                 });
-//         });
-//
-//         // Start the server
-//         app.listen(port, () => {
-//             console.log(`Server is running on port ${port}`);
-//         });
-//     })
-//     .catch(error => {
-//         console.error('Error connecting to MongoDB Atlas:', error);
-//     });
