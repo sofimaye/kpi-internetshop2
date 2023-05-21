@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'roboto', sans-serif;
+}
+
+.hero-section, .main-products-container, .wishlist, .cart, .four-o-four{
+    min-height: 100vh;
+    flex: 1 0 auto;
+}
+
+.cart-number, #select-sorting, .wish-btn{
+    color: black;
+}
+
+

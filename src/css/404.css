@@ -1,0 +1,18 @@
+.four-o-four{
+    display: flex;
+    flex-direction: column;
+}
+.four-o-four img{
+    margin: 5% auto;
+    max-width: 100%;
+}
+
+.four-o-four-msg{
+    text-align: center;
+    text-transform: capitalize;
+    color: #383838;
+}
+
+.four-o-four-msg a{
+    color: #383838;
+}
