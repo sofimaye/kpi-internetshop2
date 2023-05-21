@@ -7,6 +7,7 @@ const { MongoClient } = require('mongodb');
 
 // Enable CORS for all origins
 app.use(cors({origin: "*"}));
+app.use(express.json());
 
 // MongoDB Atlas connection string
 const connectionString = `mongodb+srv://sofimann99:${process.env.MONGODB_PASSWORD}@kpi-internetshop2.ua9z9gk.mongodb.net/?retryWrites=true&w=majority`;
@@ -110,7 +111,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 });
         });
 
-        // Get wishlist
+        //Get wishlist
         app.get('/wishlist', (req, res) => {
             db.collection('wishlist')
                 .findOne()
@@ -158,10 +159,10 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
         // Update quantity
         app.put('/cart/update/:id/:size', (req, res) => {
-            const { id, size } = req.params;
+            const { productId, size } = req.params;
             const { newQuantity } = req.body;
             db.collection('cart')
-                .updateOne({ productId: id, size: size }, { $set: { quantity: Number(newQuantity)} }, {upsert: true})
+                .updateOne({ productId: productId, size: size }, { $set: { quantity: Number(newQuantity)} }, {upsert: true})
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
@@ -171,9 +172,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
         // Delete product from cart
         app.delete('/cart/delete/:id/:size', (req, res) => {
-            const { id, size } = req.params;
+            const { productId, size } = req.params;
             db.collection('cart')
-                .deleteOne({ productId: id, size: size })
+                .deleteOne({ productId: productId, size: size })
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
@@ -183,9 +184,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
         // Delete product from wishlist
         app.delete('/wishlist/delete/:id', (req, res) => {
-            const { id } = req.params;
+            const { productId } = req.params;
             db.collection('wishlist')
-                .deleteOne({ productId: id })
+                .deleteOne({ productId: productId })
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
