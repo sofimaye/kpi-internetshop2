@@ -5,7 +5,7 @@ import Homepage from "./home";
 import {Navbar} from "./navbar";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Footer from "./footer";
-import {NewPage} from "./new";
+import { AllProductsPage } from "./allProductsPage";
 import SalePage from "./sale";
 import ProductPage from "./product";
 import ErrorHandler from "./errorhandler";
@@ -32,7 +32,7 @@ root.render(
             <Navbar/>
             <Routes>
                 <Route path="/" element={<Homepage/>}/>
-                <Route path="new" element={<NewPage/>}/>
+                <Route path="all" element={<AllProductsPage/>}/>
                 <Route path="sale" element={<SalePage/>}/>
                 <Route path="search" element={<Search/>}/>
                 <Route path="categories/dresses" element={<Category key={5} id={5}/>}/>

@@ -43,7 +43,7 @@ export function CategorySection({category}) {
 
 }
 
-export function NewPage() {
+export function AllProductsPage() {
     const [categories, setCategories] = useState();
     useEffect(() => {
         getAllCategories().then(setCategories);

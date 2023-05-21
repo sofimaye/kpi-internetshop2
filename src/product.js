@@ -15,7 +15,7 @@ export default function ProductPage() {
 
     useEffect(() => {
         getProductById({id: parseInt(id)}).then(setProduct)
-    }, [product]);
+    }, [id]);
 
     if (!product) return <ErrorHandler/>;
 

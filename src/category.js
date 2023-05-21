@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Product} from "./new";
+import {Product} from "./allProductsPage";
 import {getProductsByCategory} from "./data/data";
 import Pagination from "./pagination";
 import Sorting from "./sort";

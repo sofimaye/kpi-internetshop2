@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 import {getProductsWithDiscount} from "./data/data";
-import {Product} from "./new";
+import {Product} from "./allProductsPage";
 import Sorting from "./sort";
 
 export default function SalePage() {

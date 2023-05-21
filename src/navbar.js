@@ -6,7 +6,7 @@ import {useNavbarNum} from "./navnumber";
 
 const routes = {
     home: "/",
-    new: "new",
+    all: "all",
     bags: "categories/bags",
     shoes: "categories/shoes",
     dresses: "categories/dresses",
