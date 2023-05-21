@@ -100,11 +100,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         // Get cart
         app.get('/cart', (req, res) => {
             db.collection('cart')
-                .findOne()
-                .then(data => {
-                    const cart = JSON.parse(data) || [];
-                    res.json(cart);
-                })
+                .find({})
+                .toArray()
+                .then(data => res.json(data))
                 .catch(error => {
                     console.error('Error:', error);
                     res.sendStatus(500);
@@ -114,11 +112,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         //Get wishlist
         app.get('/wishlist', (req, res) => {
             db.collection('wishlist')
-                .findOne()
-                .then(data => {
-                    const wishlist = JSON.parse(data) || [];
-                    res.json(wishlist);
-                })
+                .find({})
+                .toArray()
+                .then(data => res.json(data))
                 .catch(error => {
                     console.error('Error:', error);
                     res.sendStatus(500);
@@ -128,16 +124,14 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         // Count cart items
         app.get('/cart/count', (req, res) => {
             db.collection('cart')
-                .findOne()
-                .then(data => {
-                    const cart = JSON.parse(data) || [];
-                    let number = 0;
-
+                .find({})
+                .toArray()
+                .then(cart => {
+                    let count = 0;
                     for (let elem of cart) {
-                        number += elem.quantity;
+                        count += elem.quantity;
                     }
-
-                    res.json(number);
+                    res.json({count});
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -161,8 +155,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         app.put('/cart/update/:id/:size', (req, res) => {
             const { productId, size } = req.params;
             const { newQuantity } = req.body;
+            console.log("Upserting product in cart", {productId, size, quantity: newQuantity})
             db.collection('cart')
-                .updateOne({ productId: productId, size: size }, { $set: { quantity: Number(newQuantity)} }, {upsert: true})
+                .updateOne({ productId: productId, size: size }, { $set: { quantity: newQuantity} }, {upsert: true})
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
@@ -184,9 +179,9 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
         // Delete product from wishlist
         app.delete('/wishlist/delete/:id', (req, res) => {
-            const { productId } = req.params;
+            const { id } = req.params;
             db.collection('wishlist')
-                .deleteOne({ productId: productId })
+                .deleteOne({ productId: Number(id)})
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
