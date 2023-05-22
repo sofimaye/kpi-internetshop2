@@ -140,7 +140,25 @@ const deleteProductFromWishList = async ({ id }) => {
     }
 };
 
+// for server-side
 module.exports = {
+    getProductsByCategory,
+    getAllCategories,
+    getCategoryById,
+    getProductById,
+    countCartItems,
+    updateQuantity,
+    deleteProductFromCart,
+    getCart,
+    addProductToWishlist,
+    getWishlist,
+    getProductsWithDiscount,
+    searchProducts,
+    deleteProductFromWishList
+};
+
+// For client-side (ES modules)
+export {
     getProductsByCategory,
     getAllCategories,
     getCategoryById,
