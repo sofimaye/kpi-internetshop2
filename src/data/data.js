@@ -121,7 +121,7 @@ const updateQuantity = async ({ id, size, newQuantity }) => {
 };
 const deleteProductFromCart = async ({ id, size }) => {
     try {
-        await fetch(`http://localhost:4000/cart/${id}/${size}`, {
+        await fetch(`http://localhost:4000/cart/delete/${id}/${size}`, {
             method: 'DELETE'
         });
     } catch (error) {
@@ -154,8 +154,6 @@ module.exports = {
     searchProducts,
     deleteProductFromWishList
 };
-
-
 //
 // const getProductsByCategory = ({categoryId}) => {
 //     return new Promise((resolve) => {

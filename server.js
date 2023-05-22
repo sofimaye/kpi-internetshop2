@@ -149,18 +149,19 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 });
         });
 
+
+        // fix cart's counter also
         // Delete product from cart
         app.delete('/cart/delete/:id/:size', (req, res) => {
-            const { productId, size } = req.params;
+            const { id, size } = req.params;
             db.collection('cart')
-                .deleteOne({ productId: productId, size: size })
+                .deleteOne({ productId: Number(id), size: size })
                 .then(() => res.sendStatus(200))
                 .catch(error => {
                     console.error('Error:', error);
                     res.sendStatus(500);
                 });
         });
-
 
         //Get wishlist
         app.get('/wishlist', (req, res) => {
