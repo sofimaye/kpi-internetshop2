@@ -110,7 +110,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         // Count cart items
         app.get('/cart/count', (req, res) => {
             db.collection('cart')
-                .find({})
+                .find()
                 .toArray()
                 .then(cart => {
                     let count = 0;
@@ -148,9 +148,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                     res.sendStatus(500);
                 });
         });
-
-
-        // fix cart's counter also
         // Delete product from cart
         app.delete('/cart/delete/:id/:size', (req, res) => {
             const { id, size } = req.params;

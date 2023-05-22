@@ -83,7 +83,8 @@ const getWishlist = async () => {
 const countCartItems = async () => {
     try {
         const response = await fetch('http://localhost:4000/cart/count');
-        return await response.json().count;
+        const data = await response.json();
+        return data.count;
     } catch (error) {
         console.error('Error:', error);
         return 0;
