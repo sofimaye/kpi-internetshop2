@@ -49,7 +49,6 @@ const getProductsWithDiscount = async () => {
     }
 };
 
-
 const searchProducts = async ({ searchItems }) => {
     try {
         const response = await fetch(`http://localhost:4000/search?search=${encodeURIComponent(searchItems)}`);
@@ -140,24 +139,6 @@ const deleteProductFromWishList = async ({ id }) => {
     }
 };
 
-// for server-side
-module.exports = {
-    getProductsByCategory,
-    getAllCategories,
-    getCategoryById,
-    getProductById,
-    countCartItems,
-    updateQuantity,
-    deleteProductFromCart,
-    getCart,
-    addProductToWishlist,
-    getWishlist,
-    getProductsWithDiscount,
-    searchProducts,
-    deleteProductFromWishList
-};
-
-// For client-side (ES modules)
 export {
     getProductsByCategory,
     getAllCategories,

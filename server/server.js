@@ -129,7 +129,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         app.put('/cart/update/:id/:size', (req, res) => {
             const { id, size } = req.params;
             const { newQuantity } = req.body;
-            console.log("Upserting product in cart", { productId: id, size, quantity: newQuantity });
             db.collection('cart')
                 .updateOne(
                     { productId: Number(id), size: size },

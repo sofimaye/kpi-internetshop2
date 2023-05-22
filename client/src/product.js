@@ -53,7 +53,7 @@ export default function ProductPage() {
                     <button className="btn card-add-btn" onClick={() => {
                         !selectedSize ? alert('choose size!'):
                             updateQuantity({id: product.id, size: selectedSize, newQuantity: 1})
-                            && quantityOfCartNumber.updated()
+                                .then(() => quantityOfCartNumber.updated())
                     }}>
                         add to cart
                     </button>
